@@ -1,83 +1,103 @@
-<!doctype html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.graticule {
+    fill: none;
+    stroke: #777;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+}
 
-<!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="scotchTodo">
-<head>
-	<!-- META -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+.land {
+    fill: #222;
+}
 
-	<title>Node/Angular Todo App</title>
+.direct {
+    fill: #900;
+}
 
-	<!-- SCROLLS -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-	<style>
-		html 					{ overflow-y:scroll; }
-		body 					{ padding-top:50px; }
-		#todo-list 				{ margin-bottom:30px; }
-		#todo-form 	 			{ margin-bottom:50px; }
-	</style>
+.indirect {
+    fill: #990;
+}
 
-	<!-- SPELLS -->
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script><!-- load angular -->
+.boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<!-- map source data/world-atlas/topo/world-50m.json -->
+<script>
 
-	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
-	<script src="js/services/todos.js"></script> <!-- load our todo service -->
-	<script src="js/core.js"></script> <!-- load our main application -->
+/* JavaScript goes here. */
 
-</head>
-<!-- SET THE CONTROLLER -->
-<body ng-controller="mainController">
-	<div class="container">
+var width = 960,
+    height = 480;
 
-		<!-- HEADER AND TODO COUNT -->
-		<div class="jumbotron text-center">
-			<h1>I'm a Todo-aholic <span class="label label-info">{{ todos.length }}</span></h1>
-		</div>
+var projection = d3.geo.equirectangular()
+    .scale(153)
+    .translate([width / 2, height / 2])
+    .precision(.1);
 
-		<!-- TODO LIST -->
-		<div id="todo-list" class="row">
-			<div class="col-sm-4 col-sm-offset-4">
+var path = d3.geo.path()
+    .projection(projection);
 
-				
+var graticule = d3.geo.graticule();
 
-				<!-- LOOP OVER THE TODOS IN $scope.todos -->
-				<div class="checkbox" ng-repeat="todo in todos">
-					<label>
-						<input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }}
-					</label>
-				</div>
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-				<p class="text-center" ng-show="loading">
-					<span class="fa fa-spinner fa-spin fa-3x"></span>
-				</p>
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
 
-			</div>
-		</div>
+d3.json("/api/satellites", function(error, satellites) {
+d3.json("world-50m.json", function(error, world) {
+    svg.insert("path", ".graticule")
+	.datum(topojson.feature(world, world.objects.land))
+	.attr("class", "land")
+	.attr("d", path);
 
-		<!-- FORM TO CREATE TODOS -->
-		<div id="todo-form" class="row">
-			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<form>
-					<div class="form-group">
+    svg.insert("path", ".graticule")
+	.datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+	.attr("class", "boundary")
+	.attr("d", path);
 
-						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-						<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
-					</div>
+    svg.selectAll(".pin")
+	.data(satellites)
+	.enter().append("circle", ".pin")
+	.attr("r", 5)
+	.attr("class", "direct")
+	.attr("transform", function(d) {
+	    return "translate(" + projection([
+		d.lon,
+		d.lat
+	    ]) + ")"
+	});
 
-					<!-- createToDo() WILL CREATE NEW TODOS -->
-					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
-				</form>
-			</div>
-		</div>
+    /*
+    svg.selectAll(".pin")
+	.data(satellites.indirect)
+	.enter().append("circle", ".pin")
+	.attr("r", 4)
+	.attr("class", "indirect")
+	.attr("transform", function(d) {
+	    return "translate(" + projection([
+		d.longitude,
+		d.latitude
+	    ]) + ")"
+	});
+    */
+});
+});
 
-		<div class="text-center text-muted">
-			<p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
-			<p>Read the <a href="http://scotch.io/tutorials/javascript/creating-a-single-page-todo-app-with-node-and-angular">tutorial</a>.</p>
-		</div>
+d3.select(self.frameElement).style("height", height + "px");
 
-	</div>
 
-</body>
-</html>
+
+</script>
