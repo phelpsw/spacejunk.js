@@ -12,12 +12,8 @@
     fill: #222;
 }
 
-.direct {
+.satellite {
     fill: #900;
-}
-
-.indirect {
-    fill: #990;
 }
 
 .boundary {
@@ -29,10 +25,7 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
-<!-- map source data/world-atlas/topo/world-50m.json -->
 <script>
-
-/* JavaScript goes here. */
 
 var width = 960,
     height = 480;
@@ -72,32 +65,16 @@ d3.json("world-50m.json", function(error, world) {
 	.data(satellites)
 	.enter().append("circle", ".pin")
 	.attr("r", 5)
-	.attr("class", "direct")
+	.attr("class", "satellite")
 	.attr("transform", function(d) {
 	    return "translate(" + projection([
 		d.lon,
 		d.lat
 	    ]) + ")"
 	});
-
-    /*
-    svg.selectAll(".pin")
-	.data(satellites.indirect)
-	.enter().append("circle", ".pin")
-	.attr("r", 4)
-	.attr("class", "indirect")
-	.attr("transform", function(d) {
-	    return "translate(" + projection([
-		d.longitude,
-		d.latitude
-	    ]) + ")"
-	});
-    */
 });
 });
 
 d3.select(self.frameElement).style("height", height + "px");
-
-
 
 </script>
