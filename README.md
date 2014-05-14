@@ -1,8 +1,8 @@
+# Satellite Mapping App
+
 # Node Todo App
 
-A Node app built with MongoDB and Angular. For demonstration purposes and a tutorial.
-
-Node provides the RESTful API. Angular provides the frontend and accesses the API. MongoDB stores like a hoarder.
+A Node app built with MongoDB and Angular. For demonstration purposes and a tutorial.  This was adapted from [github](http://github.com:scotch-io/node-todo) and the associated [article](http://scotch.io/tutorials/javascript/creating-a-single-page-todo-app-with-node-and-angular)
 
 ## Requirements
 
@@ -10,23 +10,22 @@ Node provides the RESTful API. Angular provides the frontend and accesses the AP
 
 ## Installation
 
-1. Clone the repository: `git clone git@github.com:scotch-io/node-todo`
+1. Clone the repository: `git clone git@github.com:phelpsw/spacejunk.js.git`
 2. Install the application: `npm install`
 3. Start the server: `node server.js`
 4. View in browser at `http://localhost:8080`
 
-## Tutorial Series
 
-This repo corresponds to the Node Todo Tutorial Series on [scotch.io](http://scotch.io)
+## TODO
 
-Each branch represents a certain tutorial.
-- tut1-starter: [Creating a Single Page Todo App with Node and Angular](http://scotch.io/tutorials/javascript/creating-a-single-page-todo-app-with-node-and-angular)
-- tut2-services: Coming Soon
-- tut3-auth: Coming Soon
-- tut4-sockets: Coming Soon
-- tut5-redis: Coming Soon
-- tut6-organization: Coming Soon
+1. Create user satellite management page
+1. Create login system
+ * http://stackoverflow.com/questions/6951563/storing-passwords-with-node-js-and-mongodb
+ * http://codahale.com/how-to-safely-store-a-password/
+ * https://github.com/jasonkostempski/psychic-octo-ninja/blob/master/models/account.js
+1. Move page index to demo
+1. Histogram of apogees
+1. Skull icon with counter of deorbited objects
+1. More examples of how to embed and manipulate globe based on awesome D3 functionality
+1. Figure out CDN (or self host) D3 javascript
 
-Happy Todo-ing!
-
-![Todo-aholic](http://i.imgur.com/ikyqgrn.png)
