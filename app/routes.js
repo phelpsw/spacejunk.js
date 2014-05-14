@@ -22,6 +22,48 @@ module.exports = function(app) {
 	});
     });
 
+    app.get('/api/manage-sats', function(req, res) {
+	Users.findOne({'name' : 'bob2'}, function(err, user) {
+	    if (err)
+		res.send(err)
+	    res.json(user);
+	});
+    });
+
+    // create satellite and send back all user sats after creation.
+    app.post('/api/manage-sats', function(req, res) {
+	
+	// TODO: verify req.body.text is integer and is unique
+	Users.update({'name' : 'bob2'},
+		     {'$push' : {objects: req.body.text}},
+		     function(err, todo) {
+			if (err)
+			    res.send(err);
+			Users.findOne({'name' : 'bob2'}, function(err, user) {
+			    if (err)
+				res.send(err)
+			    res.json(user);
+			});
+	});
+    });
+
+    // delete a satellite
+    app.delete('/api/manage-sats/:norad_id', function(req, res) {
+	// TODO: verify req.body.text is integer
+	Users.update({'name' : 'bob2'},
+		     {'$pull' : {objects: req.body.text}},
+		     function(err, todo) {
+			if (err)
+			    res.send(err);
+			Users.findOne({'name' : 'bob2'}, function(err, user) {
+			    if (err)
+				res.send(err)
+			    res.json(user);
+			});
+	});
+    });
+
+
     // application -------------------------------------------------------------
     app.get('*', function(req, res) {
 	// load the single view file (angular will handle the page changes on the
