@@ -32,10 +32,10 @@ module.exports = function(app) {
 
     // create satellite and send back all user sats after creation.
     app.post('/api/manage-sats', function(req, res) {
-	
+        console.log(req.body.id);
 	// TODO: verify req.body.text is integer and is unique
 	Users.update({'name' : 'bob2'},
-		     {'$push' : {objects: req.body.text}},
+		     {'$push' : {objects: Number(req.body.id)}},
 		     function(err, todo) {
 			if (err)
 			    res.send(err);
@@ -48,10 +48,9 @@ module.exports = function(app) {
     });
 
     // delete a satellite
-    app.delete('/api/manage-sats/:norad_id', function(req, res) {
-	// TODO: verify req.body.text is integer
+    app.delete('/api/manage-sats/:obj_id', function(req, res) {
 	Users.update({'name' : 'bob2'},
-		     {'$pull' : {objects: req.body.text}},
+		     {'$pull' : {objects: Number(req.params.obj_id)}},
 		     function(err, todo) {
 			if (err)
 			    res.send(err);
