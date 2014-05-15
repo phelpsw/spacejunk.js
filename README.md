@@ -24,7 +24,7 @@ res GET http://localhost:8080/api/satellites/
 
 res GET http://localhost:8080/api/manage-sats
 
-res POST http://localhost:8080/api/manage-sats -d "13"
+res POST http://localhost:8080/api/manage-sats -d "{'id':'12345'}"
 
 res DELETE http://localhost:8080/api/manage-sats/10
 ```
@@ -34,6 +34,7 @@ More examples [here](https://github.com/jawerty/res)
 ## TODO
 
 1. Create user satellite management page with angular
+1. Objects allocated to user should be object ids rather than norad ids to allow for tracking other target types
 1. Make users unique
 1. Create login system
  * http://stackoverflow.com/questions/6951563/storing-passwords-with-node-js-and-mongodb
@@ -45,6 +46,6 @@ More examples [here](https://github.com/jawerty/res)
 1. More examples of how to embed and manipulate globe based on awesome D3 functionality
 1. Figure out CDN (or self host) D3 javascript
 1. Add indirect relationship sats
-1. Animate path 
+1. Animate path
 
 
